@@ -5,8 +5,8 @@ export default function Header() {
     const location = useLocation();
     function pathMathRouth(Route) {
         if (Route === location.pathname) {
-            console.log(location.pathname);
             return true;
+            //console.log(location.pathname);
         }
     }
 
@@ -24,7 +24,7 @@ export default function Header() {
                         <li
                             className={`cursor-pointer border-b-2 border-b-transparent text-gray "${
                                 pathMathRouth("/") &&
-                                "text-black border-b-orange-500 font-bold"
+                                "border-b-orange-500 text-black font-bold"
                             }`}
                             onClick={() => navigate("/")}
                         >
