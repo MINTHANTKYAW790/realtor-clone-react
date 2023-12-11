@@ -3,6 +3,7 @@ import { IoEyeOff } from "react-icons/io5";
 import { IoIosEye } from "react-icons/io";
 import { Link } from "react-router-dom";
 import SignUp from "./SignUp";
+import OAuth from "../components/OAuth";
 
 export default function SignIn() {
     const [showPassword, setShowPassword] = useState(false);
@@ -50,7 +51,7 @@ export default function SignIn() {
                             />
                             {showPassword ? (
                                 <IoIosEye
-                                    className="absolute right-6 top-8 text-lg cursor-pointer"
+                                    className="absolute right-6 top-3 text-lg cursor-pointer"
                                     onClick={() => {
                                         setShowPassword(
                                             (prevState) => !prevState
@@ -86,16 +87,20 @@ export default function SignIn() {
                             </Link>
                         </div>
                         <button
-                            className="bg-blue-500 mb-5 py-2 w-full mb-5 shadow-md active:bg-blue-900
+                            className="bg-blue-500 mb-5 py-2 w-full uppercase shadow-md active:bg-blue-900
                          text-white rounded-md text-lg font-bold hover:bg-blue-700 transition duration-300 ease-in-out"
                         >
                             Sign In
                         </button>
-                        <div className="my-5 before:border-tflex justify-center items-center before:border:flex-1 before:border-gray">
+                        <div
+                            className="my-4 before:border-t flex before:flex-1 items-center  before:border-gray-300
+                        after:border-t  after:flex-1  after:border-gray-300"
+                        >
                             <p className="text-center font-semibold mx-4  ">
                                 OR
                             </p>
                         </div>
+                        <OAuth></OAuth>
                     </form>
                 </div>
             </div>
