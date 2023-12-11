@@ -12,7 +12,7 @@ export default function Header() {
 
     return (
         <div>
-            <header className="sticky z-10">
+            <header className="sticky z-10 bg-white">
                 <div className="flex justify-between items-center  px-20 border-b-0 shadow-md h-12 ">
                     <img
                         src="https://static.rdc.moveaws.com/images/logos/rdc-logo-default.svg"
@@ -24,7 +24,7 @@ export default function Header() {
                         <li
                             className={`cursor-pointer border-b-2 border-b-transparent text-gray "${
                                 pathMathRouth("/") &&
-                                "text-black border-b-red-950 font-bold"
+                                "text-black border-b-orange-500 font-bold"
                             }`}
                             onClick={() => navigate("/")}
                         >
@@ -33,7 +33,7 @@ export default function Header() {
                         <li
                             className={`cursor-pointer border-b-2 border-b-transparent text-gray"${
                                 pathMathRouth("/offers") &&
-                                "text-black border-b-red-950 font-bold"
+                                "text-black border-b-orange-500 font-bold"
                             }`}
                             onClick={() => navigate("/offers")}
                         >
@@ -42,7 +42,7 @@ export default function Header() {
                         <li
                             className={`cursor-pointer border-b-2 border-b-transparent text-gray "${
                                 pathMathRouth("/sign-in") &&
-                                "text-black border-b-red-950 font-bold"
+                                "text-black border-b-orange-500 font-bold"
                             }`}
                             onClick={() => navigate("/sign-in")}
                         >
