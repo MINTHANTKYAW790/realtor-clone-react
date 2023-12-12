@@ -2,8 +2,16 @@ import React, { useState } from "react";
 import { IoEyeOff } from "react-icons/io5";
 import { IoIosEye } from "react-icons/io";
 import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    updateProfile,
+} from "firebase/auth";
 import OAuth from "../components/OAuth";
+import { db } from "../firebase";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { toast } from "react-toastify";
 
 export default function SignUp() {
     const [showPassword, setShowPassword] = useState(false);
@@ -14,11 +22,36 @@ export default function SignUp() {
     });
 
     const { name, email, password } = formData;
+    const navigate = useNavigate();
     function onChange(e) {
         setFormData((prevState) => ({
             ...prevState,
             [e.target.id]: e.target.value,
         }));
+    }
+    async function onSubmit(e) {
+        e.preventDefault();
+        try {
+            const auth = getAuth();
+            const userCredential = await createUserWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
+            updateProfile(auth.currentUser, {
+                displayName: name,
+            });
+            const user = userCredential.user;
+            const formDataCopy = { ...formData };
+            delete formDataCopy.password;
+            formDataCopy.timestamp = serverTimestamp();
+            await setDoc(doc(db, "users", user.uid), formDataCopy);
+            navigate("/");
+            toast.success("Sign up was successful!");
+        } catch (error) {
+            console.log(error);
+            toast.error("Something went wrong with the registration!");
+        }
     }
     return (
         <section>
@@ -26,11 +59,11 @@ export default function SignUp() {
             <div className="flex flex-wrap mx-10 justify-between items-center ">
                 <img
                     src="https://images.unsplash.com/flagged/photo-1564767609342-620cb19b2357?q=80&w=773&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    alt="key image"
+                    alt="key"
                     className="w-full md:w-[50%] lg:w-[50%] rounded-lg"
                 />
                 <div className=" w-full md:w-[40%] lg:w-[40%] rounded-lg mt-10  ">
-                    <form>
+                    <form onSubmit={onSubmit}>
                         <div>
                             <input
                                 type="text"
