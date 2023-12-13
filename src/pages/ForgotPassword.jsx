@@ -2,14 +2,26 @@ import React, { useState } from "react";
 import { IoEyeOff } from "react-icons/io5";
 import { IoIosEye } from "react-icons/io";
 import { Link } from "react-router-dom";
-
+import { toast } from "react-toastify";
 import OAuth from "../components/OAuth";
+import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 
 export default function ForgotPassword() {
     const [email, setEmail] = useState("");
 
     function onChange(e) {
+        e.preventDefault();
         setEmail(e.target.value);
+    }
+    async function onSubmit(e) {
+        try {
+            e.preventDefault();
+            const auth = getAuth();
+            await sendPasswordResetEmail(auth, email);
+            toast.success("Password reset was sent.");
+        } catch (error) {
+            toast.error("Invalid Email..!");
+        }
     }
     return (
         <section>
@@ -20,11 +32,11 @@ export default function ForgotPassword() {
             <div className="flex flex-wrap mx-10 justify-between items-center ">
                 <img
                     src="https://images.unsplash.com/flagged/photo-1564767609342-620cb19b2357?q=80&w=773&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    alt="key image"
+                    alt="key"
                     className="w-full md:w-[50%] lg:w-[50%] rounded-lg"
                 />
                 <div className=" w-full md:w-[40%] lg:w-[40%] rounded-lg mt-10  ">
-                    <form>
+                    <form onSubmit={onSubmit}>
                         <div>
                             <input
                                 type="email"
@@ -54,6 +66,7 @@ export default function ForgotPassword() {
                             </Link>
                         </div>
                         <button
+                            type="submit"
                             className="bg-blue-500 mb-5 py-2 w-full uppercase shadow-md active:bg-blue-900
                          text-white rounded-md text-lg font-bold hover:bg-blue-700 transition duration-300 ease-in-out"
                         >
