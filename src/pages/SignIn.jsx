@@ -2,8 +2,12 @@ import React, { useState } from "react";
 import { IoEyeOff } from "react-icons/io5";
 import { IoIosEye } from "react-icons/io";
 import { Link } from "react-router-dom";
-import SignUp from "./SignUp";
+
 import OAuth from "../components/OAuth";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { getAuth } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 export default function SignIn() {
     const [showPassword, setShowPassword] = useState(false);
@@ -19,6 +23,24 @@ export default function SignIn() {
             [e.target.id]: e.target.value,
         }));
     }
+    const navigate = useNavigate();
+    async function onSubmit(e) {
+        e.preventDefault();
+        try {
+            const auth = getAuth();
+            const userCredential = await signInWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
+            if (userCredential.user) {
+                navigate("/");
+            }
+            toast.success("Logged in as " + auth.currentUser.displayName);
+        } catch (error) {
+            toast.error("Bad user credentials");
+        }
+    }
     return (
         <section>
             <h1 className="text-center text-2xl mt-2 font-bold">SignIn</h1>;
@@ -29,7 +51,7 @@ export default function SignIn() {
                     className="w-full md:w-[50%] lg:w-[50%] rounded-lg"
                 />
                 <div className=" w-full md:w-[40%] lg:w-[40%] rounded-lg mt-10  ">
-                    <form>
+                    <form onSubmit={onSubmit}>
                         <div>
                             <input
                                 type="email"
@@ -87,6 +109,7 @@ export default function SignIn() {
                             </Link>
                         </div>
                         <button
+                            type="submit"
                             className="bg-blue-500 mb-5 py-2 w-full uppercase shadow-md active:bg-blue-900
                          text-white rounded-md text-lg font-bold hover:bg-blue-700 transition duration-300 ease-in-out"
                         >
