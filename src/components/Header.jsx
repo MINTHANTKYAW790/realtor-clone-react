@@ -1,9 +1,26 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router";
+import { useState } from "react";
+import { getAuth } from "firebase/auth";
+import { useEffect } from "react";
+import { onAuthStateChanged } from "firebase/auth";
 export default function Header() {
     const navigate = useNavigate();
     const location = useLocation();
-    function pathMathRouth(Route) {
+    const [pageState, setPageState] = useState("Sign in");
+    const auth = getAuth();
+    console.log(auth);
+    useEffect(() => {
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                setPageState("Profile");
+            } else {
+                setPageState("Sign in");
+            }
+        });
+    }, [auth]);
+
+    function pathMatchRouth(Route) {
         if (Route === location.pathname) {
             return true;
             //console.log(location.pathname);
@@ -23,8 +40,8 @@ export default function Header() {
                     <ul className="flex justify-center items-center space-x-10 space-y-0 h-5/5 ">
                         <li
                             className={`cursor-pointer border-b-2 border-b-transparent text-gray "${
-                                pathMathRouth("/") &&
-                                "border-b-orange-500 text-black font-bold"
+                                pathMatchRouth("/") &&
+                                "border-b-orange-800 text-black font-bold"
                             }`}
                             onClick={() => navigate("/")}
                         >
@@ -32,8 +49,8 @@ export default function Header() {
                         </li>
                         <li
                             className={`cursor-pointer border-b-2 border-b-transparent text-gray"${
-                                pathMathRouth("/offers") &&
-                                "text-black border-b-orange-500 font-bold"
+                                pathMatchRouth("/offers") &&
+                                "text-black border-b-orange-800 font-bold"
                             }`}
                             onClick={() => navigate("/offers")}
                         >
@@ -41,12 +58,13 @@ export default function Header() {
                         </li>
                         <li
                             className={`cursor-pointer border-b-2 border-b-transparent text-gray "${
-                                pathMathRouth("/sign-in") &&
-                                "text-black border-b-orange-500 font-bold"
+                                (pathMatchRouth("/sign-in") ||
+                                    pathMatchRouth("/profile")) &&
+                                "text-black border-b-blue-800 font-bold"
                             }`}
-                            onClick={() => navigate("/sign-in")}
+                            onClick={() => navigate("/profile")}
                         >
-                            SignIn
+                            {pageState}
                         </li>
                     </ul>
                 </div>
