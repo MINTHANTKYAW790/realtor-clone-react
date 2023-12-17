@@ -1,5 +1,7 @@
 import React from "react";
 import { useState } from "react";
+import { FcHome } from "react-icons/fc";
+import { Link } from "react-router-dom";
 import {
     fetchSignInMethodsForEmail,
     getAuth,
@@ -92,6 +94,17 @@ export default function Profile() {
                                 Sign out
                             </p>
                         </div>
+                        <button className="bg-blue-500 rounded w-full shadow-md mt-5  hover:bg-blue-600 transition duration-200 ease-in-out active:bg-blue-700 active:shadow-lg">
+                            <Link
+                                to={"/create-listing"}
+                                className="flex justify-center items-center"
+                            >
+                                <FcHome className="bg-white rounded-xl mr-2 text-3xl" />
+                                <p className="uppercase py-2 text-white ">
+                                    sell or rent your home
+                                </p>
+                            </Link>
+                        </button>
                     </form>
                 </div>
             </section>
