@@ -22,19 +22,19 @@ export default function CreateListing() {
     const [geolocationEnabled, setGeolocationEnabled] = useState(false);
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
-        type: "rent",
-        name: "mg mg min thant kyaw",
+        type: "sale",
+        name: "",
         bedrooms: 1,
         bathrooms: 1,
-        parking: false,
+        parking: true,
         furnished: true,
         address: "",
         description: "",
         offer: false,
-        regularprice: 500,
-        discountprice: 0,
-        latitude: -90,
-        longtitude: -1,
+        regularprice: 50,
+        discountprice: 1,
+        latitude: 1,
+        longtitude: 1,
         images: {},
     });
     const {
@@ -354,7 +354,7 @@ export default function CreateListing() {
                                 onChange={onChange}
                                 required
                                 min="-90"
-                                max="-90"
+                                max="90"
                                 className="w-full px-4 py-2 rounded text-gray-400 bg-white
                         border border-gray-400 hover:bg-white hover:text-gray-400
                         hover:border-gray-400 transition duration-200 ease-in-out
