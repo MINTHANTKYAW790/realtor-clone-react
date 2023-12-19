@@ -1,26 +1,40 @@
 import React from "react";
 import { useState } from "react";
 import { Spinner } from "../components/Spinner";
+import { getAuth } from "firebase/auth";
+import { v4 as uuidv4 } from "uuid";
+import { serverTimestamp } from "firebase/firestore";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "../firebase";
+import { useNavigate } from "react-router";
+import {
+    getStorage,
+    ref,
+    uploadBytesResumable,
+    getDownloadURL,
+} from "firebase/storage";
 
 import { toast } from "react-toastify";
 
 export default function CreateListing() {
-    const [geolocationEnabled, setGeolocationEnabled] = useState(true);
+    const navigate = useNavigate();
+    const auth = getAuth();
+    const [geolocationEnabled, setGeolocationEnabled] = useState(false);
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         type: "rent",
-        name: "",
+        name: "mg mg min thant kyaw",
         bedrooms: 1,
         bathrooms: 1,
         parking: false,
         furnished: true,
         address: "",
         description: "",
-        offer: true,
-        regularprice: 0,
+        offer: false,
+        regularprice: 500,
         discountprice: 0,
-        latitude: 0,
-        longtitude: 0,
+        latitude: -90,
+        longtitude: -1,
         images: {},
     });
     const {
@@ -60,6 +74,7 @@ export default function CreateListing() {
             }));
         }
     }
+
     async function onSubmit(e) {
         e.preventDefault();
         setLoading(true);
@@ -83,11 +98,95 @@ export default function CreateListing() {
             geolocation.lat = data.results[0]?.geometry.location.lat ?? 0;
             geolocation.lng = data.results[0]?.geometry.location.lng ?? 0;
             location = data.status === "ZERO_RESULTS" && undefined;
-            if (location === undefined || location === "undefined") {
+            if (location === undefined) {
                 toast.error("Please enter a correct address!");
             }
+        } else {
+            geolocation.lat = latitude;
+            geolocation.lng = longtitude;
         }
+
+        async function storeImage(image) {
+            return new Promise((resolve, reject) => {
+                const storage = getStorage();
+                const filename = `${auth.currentUser.uid}-${
+                    image.name
+                }-${uuidv4()}`;
+                const storageRef = ref(storage, filename);
+                const uploadTask = uploadBytesResumable(storageRef, image);
+                // Listen for state changes, errors, and completion of the upload.
+                uploadTask.on(
+                    "state_changed",
+                    (snapshot) => {
+                        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                        const progress =
+                            (snapshot.bytesTransferred / snapshot.totalBytes) *
+                            100;
+                        console.log("Upload is " + progress + "% done");
+                        switch (snapshot.state) {
+                            case "paused":
+                                console.log("Upload is paused");
+                                break;
+                            case "running":
+                                console.log("Upload is running");
+                                break;
+                        }
+                    },
+                    (error) => {
+                        reject(error);
+                        // A full list of error codes is available at
+                        // https://firebase.google.com/docs/storage/web/handle-errors
+                        switch (error.code) {
+                            case "storage/unauthorized":
+                                // User doesn't have permission to access the object
+                                break;
+                            case "storage/canceled":
+                                // User canceled the upload
+                                break;
+
+                            // ...
+
+                            case "storage/unknown":
+                                // Unknown error occurred, inspect error.serverResponse
+                                break;
+                        }
+                    },
+                    () => {
+                        // Upload completed successfully, now we can get the download URL
+                        getDownloadURL(uploadTask.snapshot.ref).then(
+                            (downloadURL) => {
+                                resolve(downloadURL);
+                            }
+                        );
+                    }
+                );
+            });
+        }
+
+        const imgUrls = await Promise.all(
+            [...images].map((image) => storeImage(image))
+        ).catch((error) => {
+            setLoading(false);
+            toast.error("Images not uploaded !");
+            return;
+        });
+
+        const formDataCopy = {
+            ...formData,
+            imgUrls,
+            geolocation,
+            timestamp: serverTimestamp(),
+            userRef: auth.currentUser.uid,
+        };
+        delete formDataCopy.images;
+        !formDataCopy.offer && delete formDataCopy.discountprice;
+        delete formDataCopy.latitude;
+        delete formDataCopy.longtitude;
+        const docRef = await addDoc(collection(db, "listings"), formDataCopy);
+        setLoading(false);
+        navigate(`/category/${formDataCopy}/${docRef}`);
     }
+
     if (loading) {
         return <Spinner />;
     }
