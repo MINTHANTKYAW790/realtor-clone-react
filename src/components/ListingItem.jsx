@@ -2,8 +2,10 @@ import React from "react";
 import Moment from "react-moment";
 import { Link } from "react-router-dom";
 import { CiLocationOn } from "react-icons/ci";
+import { RiDeleteBinFill } from "react-icons/ri";
+import { FaEdit } from "react-icons/fa";
 
-export default function ListingItem({ listing, id }) {
+export default function ListingItem({ listing, id, onDelete, onEdit }) {
     return (
         <li className="m-[10px] relative bg-white flex flex-col justify-between items-center shadow-md hover:shadow-lg rounded-md overflow-hidden transition-shadow duration-150 ease-in-out">
             <Link to={`/category/${listing.type}/${id}`} className="contents">
@@ -60,6 +62,22 @@ export default function ListingItem({ listing, id }) {
                     </div>
                 </div>
             </Link>
+            {onDelete && (
+                <RiDeleteBinFill
+                    className="absolute bottom-2 right-2 h-[14px] cursor-pointer text-red-700 "
+                    onClick={() => {
+                        onDelete(listing.id);
+                    }}
+                />
+            )}
+            {onEdit && (
+                <FaEdit
+                    className="absolute bottom-2 right-8 h-[14px] cursor-pointer text-black-500 "
+                    onClick={() => {
+                        onEdit(listing.id);
+                    }}
+                />
+            )}
         </li>
     );
 }
