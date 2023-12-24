@@ -33,8 +33,8 @@ export default function CreateListing() {
         offer: false,
         regularprice: 50,
         discountprice: 1,
-        latitude: 1,
-        longtitude: 1,
+        latitude: 1.0,
+        longtitude: 1.0,
         images: {},
     });
     const {
@@ -352,12 +352,13 @@ export default function CreateListing() {
                             <p className="w-full font-medium">Latitude</p>
                             <input
                                 type="number"
+                                step="0.0000000001"
                                 id="latitude"
                                 value={latitude}
                                 onChange={onChange}
                                 required
-                                min="-90"
-                                max="90"
+                                min="-90.00000000"
+                                max="90.00000000"
                                 className="w-full px-4 py-2 rounded text-gray-400 bg-white
                         border border-gray-400 hover:bg-white hover:text-gray-400
                         hover:border-gray-400 transition duration-200 ease-in-out
@@ -368,12 +369,13 @@ export default function CreateListing() {
                             <p className="w-full font-medium">Longtitude</p>
                             <input
                                 type="number"
+                                step="0.0000000001"
                                 id="longtitude"
                                 value={longtitude}
                                 onChange={onChange}
                                 required
-                                min="-180"
-                                max="180"
+                                min="-180.00000000"
+                                max="180.00000000"
                                 className="w-full px-4 py-2 rounded text-gray-400 bg-white
                         border border-gray-400 hover:bg-white hover:text-gray-400
                         hover:border-gray-400 transition duration-200 ease-in-out

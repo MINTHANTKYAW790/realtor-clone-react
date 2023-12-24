@@ -381,6 +381,7 @@ export default function EditListing() {
                             <p className="w-full font-medium">Latitude</p>
                             <input
                                 type="number"
+                                step="0.00000000000001"
                                 id="latitude"
                                 value={latitude}
                                 onChange={onChange}
@@ -397,6 +398,7 @@ export default function EditListing() {
                             <p className="w-full font-medium">Longtitude</p>
                             <input
                                 type="number"
+                                step="0.00000000000001"
                                 id="longtitude"
                                 value={longtitude}
                                 onChange={onChange}
