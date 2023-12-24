@@ -78,7 +78,7 @@ export default function CreateListing() {
     async function onSubmit(e) {
         e.preventDefault();
         setLoading(true);
-        if (regularprice < discountprice) {
+        if (+regularprice < +discountprice) {
             setLoading(false);
             toast.error("Regular price must exceed than the discount price");
             return;
@@ -352,7 +352,7 @@ export default function CreateListing() {
                             <p className="w-full font-medium">Latitude</p>
                             <input
                                 type="number"
-                                step="0.0000000001"
+                                step="0.00000000000001"
                                 id="latitude"
                                 value={latitude}
                                 onChange={onChange}
@@ -369,7 +369,7 @@ export default function CreateListing() {
                             <p className="w-full font-medium">Longtitude</p>
                             <input
                                 type="number"
-                                step="0.0000000001"
+                                step="0.00000000000001"
                                 id="longtitude"
                                 value={longtitude}
                                 onChange={onChange}
