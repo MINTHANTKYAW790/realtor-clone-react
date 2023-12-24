@@ -54,6 +54,8 @@ export default function ListingItem({ listing, id, onDelete, onEdit }) {
                                     : "1 Bed"}
                             </p>
                             <p className="font-bold text-xs">
+                                
+
                                 {listing.bathrooms > 1
                                     ? `${listing.bathrooms} Baths`
                                     : "1 Bath"}
