@@ -27,7 +27,7 @@ export default function Home() {
                     listingsRef,
                     where("offer", "==", true),
                     orderBy("timestamp", "desc"),
-                    limit(1)
+                    limit(4)
                 );
                 //execute the query
                 const querySnap = await getDocs(q);
@@ -59,7 +59,7 @@ export default function Home() {
                     listingsRef,
                     where("type", "==", "rent"),
                     orderBy("timestamp", "desc"),
-                    limit(1)
+                    limit(4)
                 );
                 //execute the query
                 const querySnap = await getDocs(q);
@@ -91,7 +91,7 @@ export default function Home() {
                     listingsRef,
                     where("type", "==", "sale"),
                     orderBy("timestamp", "desc"),
-                    limit(1)
+                    limit(4)
                 );
                 //execute the query
                 const querySnap = await getDocs(q);
@@ -130,7 +130,7 @@ export default function Home() {
                                 <ListingItem
                                     key={listing.id}
                                     listing={listing.data}
-                                    id={listing.data}
+                                    id={listing.id}
                                 />
                             ))}
                         </ul>
@@ -151,7 +151,7 @@ export default function Home() {
                                 <ListingItem
                                     key={listing.id}
                                     listing={listing.data}
-                                    id={listing.data}
+                                    id={listing.id}
                                 />
                             ))}
                         </ul>
@@ -172,7 +172,7 @@ export default function Home() {
                                 <ListingItem
                                     key={listing.id}
                                     listing={listing.data}
-                                    id={listing.data}
+                                    id={listing.id}
                                 />
                             ))}
                         </ul>

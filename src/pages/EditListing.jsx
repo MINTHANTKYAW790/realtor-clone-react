@@ -106,7 +106,7 @@ export default function EditListing() {
     async function onSubmit(e) {
         e.preventDefault();
         setLoading(true);
-        if (regularprice < discountprice) {
+        if (+regularprice < +discountprice) {
             setLoading(false);
             toast.error("Regular price must exceed than the discount price");
             return;

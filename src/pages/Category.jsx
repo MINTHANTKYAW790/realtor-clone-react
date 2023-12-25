@@ -28,7 +28,7 @@ export default function Category() {
                     where("type", "==", params.categoryName),
                     orderBy("timestamp", "desc"),
 
-                    limit(1)
+                    limit(4)
                 );
                 const querySnap = await getDocs(q);
                 const lastVisible = querySnap.docs[querySnap.docs.length - 1];
@@ -53,10 +53,10 @@ export default function Category() {
             const listingRef = collection(db, "listings");
             const q = query(
                 listingRef,
-                where("offer", "==", params.categoryName),
+                where("type", "==", params.categoryName),
                 orderBy("timestamp", "desc"),
                 startAfter(lastFetchedListing),
-                limit(1)
+                limit(4)
             );
             const querySnap = await getDocs(q);
             const lastVisible = querySnap.docs[querySnap.docs.length - 1];
